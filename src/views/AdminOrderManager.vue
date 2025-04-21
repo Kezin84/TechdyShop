@@ -226,6 +226,6 @@ onMounted(() => {
 }
 button.active {
   font-weight: bold;
-  border: 2px solid #000;
+  border: 3px solid #000;
 }
 </style>

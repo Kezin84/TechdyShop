@@ -50,31 +50,31 @@
       <div class="row g-3" v-if="!loading">
         <div class="col-md-6">
           <div class="card p-3">
-            <h5>📦 Tổng đơn hàng</h5>
+            <h5>📦 TỔNG ĐƠN HÀNG</h5>
             <p class="fs-4">{{ stats.totalOrders }}</p>
           </div>
         </div>
         <div class="col-md-6">
           <div class="card p-3">
-            <h5>💰 Doanh thu</h5>
+            <h5>💰 DOANH THU</h5>
             <p class="fs-4 text-success">{{ formatCurrency(stats.totalRevenue) }}</p>
           </div>
         </div>
         <div class="col-md-6">
           <div class="card p-3">
-            <h5>🛒 Sản phẩm đã bán</h5>
+            <h5>🛒 SẢN PHẨM ĐÃ BÁN</h5>
             <p class="fs-4">{{ stats.totalItems }}</p>
           </div>
         </div>
         <div class="col-md-6">
           <div class="card p-3">
-            <h5>✅ Đơn hoàn thành</h5>
+            <h5>✅ĐƠN HOÀN THÀNH</h5>
             <p class="fs-4">{{ stats.completed }}</p>
           </div>
         </div>
         <div class="col-md-6">
           <div class="card p-3">
-            <h5>❌ Đơn đã huỷ</h5>
+            <h5>❌ĐƠN BỊ HỦY</h5>
             <p class="fs-4">{{ stats.cancelled }}</p>
           </div>
         </div>
