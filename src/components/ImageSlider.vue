@@ -29,11 +29,11 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const images = [
-  'https://picsum.photos/id/1015/1440/400',
-  'https://picsum.photos/id/1016/1440/400',
-  'https://picsum.photos/id/1016/1440/400',
-  'https://picsum.photos/id/1016/1440/400',
-  'https://picsum.photos/id/1018/1440/400'
+  'https://5.imimg.com/data5/SELLER/Default/2025/4/503428531/RO/SJ/BB/4849257/kaspersky-500x500.jpg',
+  'https://vncsglobal.vn/wp-content/uploads/2023/10/logo.png',
+  'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/34b5bf180145769.6505ae7623131.jpg',
+  'https://images.seeklogo.com/logo-png/18/2/intel-logo-png_seeklogo-181977.png',
+  'https://lh3.googleusercontent.com/LYUDWiiqyTSiwzbPsJnYhfTzA3kUAoYgRy_1mpKTZOuLtpaMTaNdPKm8Xesm5mxA_zUSIGy6RO4PxhUnIDgTgbmroxgVpudnc0XKWW0cByZXppI2WGo'
 ]
 
 const currentIndex = ref(0)
