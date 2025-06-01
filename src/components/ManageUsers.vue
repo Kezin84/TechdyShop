@@ -26,21 +26,24 @@
       <!-- Bảng người dùng -->
       <table class="table table-bordered table-striped">
         <thead class="table-dark">
-          <tr>
-            <th>USERNAME</th>
-            <th>HỌ TÊN</th>
-            <th>EMAIL</th>
-            <th>SĐT</th>
-            <th>ĐỊA CHỈ</th>
-            <th>NGÀY ĐĂNG KÝ</th>
-            <th>GHI CHÚ</th>
-            <th>HÀNH ĐỘNG</th>
-          </tr>
+       <tr>
+    <th>USERNAME</th>
+    <th>HỌ TÊN</th>
+    <th>TELEGRAM</th> <!-- 👈 Thêm đúng chỗ -->
+    <th>EMAIL</th>
+    <th>SĐT</th>
+    <th>ĐỊA CHỈ</th>
+    <th>NGÀY ĐĂNG KÝ</th>
+    <th>GHI CHÚ</th>
+    <th>HÀNH ĐỘNG</th>
+  </tr>
         </thead>
         <tbody>
           <tr v-for="kh in filteredUsers" :key="kh.username">
             <td>{{ kh.username }}</td>
+             
             <td>{{ kh.hoten }}</td>
+            <td>{{ kh.telegram }}</td>
             <td>{{ kh.email }}</td>
             <td>{{ kh.sdt }}</td>
             <td>{{ kh.diachi }}</td>
@@ -52,7 +55,7 @@
             </td>
           </tr>
           <tr v-if="filteredUsers.length === 0">
-            <td colspan="8" class="text-center text-muted">Không tìm thấy người dùng nào</td>
+            <td colspan="9" class="text-center text-muted">Không tìm thấy người dùng nào</td>
           </tr>
         </tbody>
       </table>
@@ -65,6 +68,11 @@
             <label>Họ tên</label>
             <input class="form-control" v-model="editingUser.hoten" />
           </div>
+          <div class="mb-2">
+  <label>Telegram</label>
+  <input class="form-control" v-model="editingUser.telegram" />
+</div>
+
           <div class="mb-2">
             <label>Email</label>
             <input class="form-control" v-model="editingUser.email" />

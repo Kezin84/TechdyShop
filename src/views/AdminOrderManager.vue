@@ -34,6 +34,33 @@ const updateStatus = async (id, status) => {
     formData.append('id', id)
     formData.append('status', status)
     await axios.post(SCRIPT_URL, formData)
+
+    // ✅ Nếu duyệt hoàn thành thì trừ kho
+    if (status === 'Đã hoàn thành') {
+      const order = orders.value.find(o => o.id === id)
+      if (order && order.products) {
+        const productList = String(order.products).split(',').map(item => item.trim())
+
+        for (const item of productList) {
+          // ✅ Tách ID và SL: "X9T4M1 – Tên SP x 10 (thuộc tính)"
+          const main = item.split('(')[0].trim() // bỏ phần thuộc tính
+          const match = main.match(/^(.*?)–.*?x\s*(\d+)/)
+
+          if (!match) continue
+
+          const productId = match[1].trim()
+          const qty = parseInt(match[2].trim()) || 0
+
+          const inventoryForm = new FormData()
+          inventoryForm.append('action', 'decreaseStock')
+          inventoryForm.append('productId', productId)
+          inventoryForm.append('quantity', qty)
+
+          await axios.post(SCRIPT_URL, inventoryForm)
+        }
+      }
+    }
+
     await fetchOrders()
   } catch (err) {
     alert('Lỗi cập nhật trạng thái')
@@ -41,6 +68,8 @@ const updateStatus = async (id, status) => {
     loading.value = false
   }
 }
+
+
 
 const updateOrder = async () => {
   if (!selectedOrder.value) return
@@ -53,6 +82,11 @@ const updateOrder = async () => {
   formData.append('products', selectedOrder.value.products)
   formData.append('total', selectedOrder.value.total)
   formData.append('status', selectedOrder.value.status || '')
+  formData.append('telegram', selectedOrder.value.telegram || '')
+formData.append('time', selectedOrder.value.time || '')
+formData.append('note', selectedOrder.value.note || '')
+formData.append('chiNhanh', selectedOrder.value.branch || '')
+
   await axios.post(SCRIPT_URL, formData)
   await fetchOrders()
   showModal.value = false
@@ -114,12 +148,115 @@ const selectOrder = (order) => {
   showModal.value = true
 }
 
-onMounted(() => {
-  fetchOrders()
-  setInterval(() => {
-    fetchOrders(true)
-  }, 10000)
+
+
+
+const productMap = ref({})
+
+const fetchProductPrices = async () => {
+  const res = await axios.get(SCRIPT_URL, {
+    params: { action: 'getProducts' }
+  })
+  const data = res.data
+  const map = {}
+  data.forEach(item => {
+    map[item['ID']] = {
+      name: item['TÊN SẢN PHẨM'],
+      price: Number(item['GIÁ']),
+      cost: isNaN(Number(item['GIÁ GỐC'])) ? 0 : Number(item['GIÁ GỐC']),
+
+
+      'KIỂU DÁNG': item['KIỂU DÁNG'] || '',
+      'MÀU SẮC': item['MÀU SẮC'] || '',
+      'KÍCH THƯỚC': item['KÍCH THƯỚC'] || '',
+      'CHẤT LIỆU': item['CHẤT LIỆU'] || '',
+      'THƯƠNG HIỆU': item['THƯƠNG HIỆU'] || '',
+      'XUẤT XỨ': item['XUẤT XỨ'] || '',
+      'BẢO HÀNH': item['BẢO HÀNH'] || ''
+    }
+  })
+  productMap.value = map
+}
+
+
+const parseProducts = (raw) => {
+  if (!raw) return []
+
+  return String(raw).split(',').map(item => {
+    const cleaned = item.trim()
+    const [idRaw, qtyRaw] = cleaned.split(' x ')
+
+    // ⚠️ Bỏ qua nếu thiếu id hoặc qty hoặc qty không phải số
+    if (!idRaw || !qtyRaw || isNaN(Number(qtyRaw.trim()))) {
+      return { line: cleaned + ' ❌', attributes: '' }
+    }
+
+    const id = idRaw.includes('–') ? idRaw.split('–')[0].trim() : idRaw.trim()
+    const qty = Number(qtyRaw.trim())
+    const info = productMap.value[id]
+
+    if (info) {
+      const total = qty * info.price
+      const attrs = [
+        `KIỂU DÁNG: ${info['KIỂU DÁNG']}`,
+        `MÀU SẮC: ${info['MÀU SẮC']}`,
+        `KÍCH THƯỚC: ${info['KÍCH THƯỚC']}`,
+        `CHẤT LIỆU: ${info['CHẤT LIỆU']}`,
+        `THƯƠNG HIỆU: ${info['THƯƠNG HIỆU']}`,
+        `XUẤT XỨ: ${info['XUẤT XỨ']}`,
+        `BẢO HÀNH: ${info['BẢO HÀNH']}`
+      ].filter(e => !e.includes('undefined') && !e.includes('null')).join(' | ')
+
+      return {
+        line: `${info.name} x ${qty} x ${info.price.toLocaleString()}₱ = ${total.toLocaleString()}₱`,
+        attributes: attrs
+      }
+    } else {
+      return { line: `${id} x ${qty} ❌`, attributes: '' }
+    }
+  })
+}
+
+
+
+onMounted(async () => {
+  await fetchProductPrices()
+  await fetchOrders()
+  setInterval(() => fetchOrders(true), 10000)
 })
+
+const pendingCount = computed(() => {
+  return orders.value.filter(o => !o.status).length
+})
+
+const calculateProfit = (order) => {
+  if (!order || !order.products) return 0
+
+  const productList = String(order.products).split(',').map(item => item.trim())
+  let totalCost = 0
+
+  for (const item of productList) {
+    // ✅ Bỏ phần (thuộc tính)
+    const main = item.split('(')[0].trim()
+
+    // ✅ Tách ID và số lượng từ "X9T4M1 – Tên SP x 10"
+    const match = main.match(/^([^\–]+)–.*?x\s*(\d+)/)
+    if (!match) continue
+
+    const id = match[1].trim()
+    const qty = parseInt(match[2]) || 0
+    const product = productMap.value[id]
+
+    if (product) {
+      totalCost += qty * product.cost
+    }
+  }
+
+  return Number(order.total) - totalCost
+}
+
+
+
 </script>
 
 <template>
@@ -127,7 +264,10 @@ onMounted(() => {
     <h3 class="fw-bold mb-4">📋 Quản lý đơn hàng</h3>
 
     <div class="mb-3 d-flex gap-2">
-      <button class="btn btn-outline-primary btn-sm" :class="{ active: currentTab === 'pending' }" @click="currentTab = 'pending'">✅ Duyệt đơn</button>
+      <button class="btn btn-outline-primary btn-sm" :class="{ active: currentTab === 'pending' }" @click="currentTab = 'pending'">
+  ✅ Duyệt đơn <span v-if="pendingCount > 0" class="badge bg-danger ms-1">{{ pendingCount }}</span>
+</button>
+
       <button class="btn btn-outline-secondary btn-sm" :class="{ active: currentTab === 'all' }" @click="currentTab = 'all'">📄 Tất cả đơn</button>
     </div>
 
@@ -165,9 +305,26 @@ onMounted(() => {
           <p><strong>👤 Người mua:</strong> {{ order.username }}</p>
           <p><strong>📍 Địa chỉ:</strong> {{ order.address }}</p>
           <p><strong>📞 SĐT:</strong> {{ order.phone }}</p>
-          <p><strong>🛍️ Sản phẩm:</strong> {{ order.products }}</p>
+         <p><strong>🛍️ Sản phẩm:</strong></p>
+<ul class="mb-2 ps-4">
+<li v-for="(item, i) in parseProducts(order.products)" :key="i">
+  {{ item.line }}
+  <div v-if="item.attributes" class="text-muted small ps-2">
+    {{ item.attributes }}
+  </div>
+</li>
+
+
+</ul>
+
+
           <p class="fw-bold text-danger">💰 Tổng tiền: {{ formatCurrency(order.total) }}</p>
           <p class="text-muted">🕒 Ngày: {{ order.date }}</p>
+          <p><strong>📨 Telegram:</strong> {{ order.telegram }}</p>
+<p><strong>⏰ Thời gian nhận:</strong> {{ order.time }}</p>
+<p><strong>📝 Ghi chú:</strong> {{ order.note }}</p>
+<p><strong>🏢 Chi nhánh:</strong> {{ order.branch || 'Không rõ' }}</p>
+
           <p><strong>📦 Trạng thái:</strong> {{ order.status || 'Đang xử lý' }}</p>
 
           <!-- ✅ THÊM NÚT HOÀN THÀNH / TỪ CHỐI -->
@@ -175,6 +332,9 @@ onMounted(() => {
             <button class="btn btn-sm btn-success" @click.stop="updateStatus(order.id, 'Đã hoàn thành')">✅ Hoàn thành</button>
             <button class="btn btn-sm btn-danger" @click.stop="updateStatus(order.id, 'Đã từ chối')">❌ Từ chối</button>
           </div>
+          <div class="mt-2 text-success fw-bold">
+  📈 Lợi nhuận: {{ formatCurrency(calculateProfit(order)) }}
+</div>
         </div>
       </div>
     </div>
@@ -197,6 +357,11 @@ onMounted(() => {
           <input v-model="selectedOrder.address" class="form-control" />
         </div>
         <div class="mb-2">
+  <label class="form-label">Chi nhánh</label>
+  <input v-model="selectedOrder.branch" class="form-control" />
+</div>
+
+        <div class="mb-2">
           <label class="form-label">Sản phẩm</label>
           <textarea v-model="selectedOrder.products" class="form-control" rows="2" />
         </div>
@@ -204,6 +369,19 @@ onMounted(() => {
           <label class="form-label">Tổng tiền</label>
           <input v-model="selectedOrder.total" type="number" class="form-control" />
         </div>
+        <div class="mb-2">
+  <label class="form-label">Telegram</label>
+  <input v-model="selectedOrder.telegram" class="form-control" />
+</div>
+<div class="mb-2">
+  <label class="form-label">Thời gian nhận</label>
+  <input v-model="selectedOrder.time" class="form-control" />
+</div>
+<div class="mb-2">
+  <label class="form-label">Ghi chú</label>
+  <input v-model="selectedOrder.note" class="form-control" />
+</div>
+
         <div class="mb-2">
           <label class="form-label">Trạng thái</label>
           <input v-model="selectedOrder.status" class="form-control" />
@@ -228,4 +406,10 @@ button.active {
   font-weight: bold;
   border: 3px solid #000;
 }
+.badge {
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 12px;
+}
+
 </style>

@@ -10,7 +10,14 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import UpdateProfile from '../components/UpdateProfile.vue' 
 import ManageUsers from '../components/ManageUsers.vue'
-
+import AdminNotifications from '@/views/AdminNotifications.vue'
+import ClientLayout from '@/layouts/ClientLayout.vue'
+import AdminInvoice from '@/views/AdminInvoice.vue'
+import AdminShopStatus from '@/views/AdminShopStatus.vue' // ✅ thêm mới
+import AdminComments from '@/views/AdminComments.vue'
+import Review from '@/views/AllComments.vue' // đường dẫn tới file vừa gộp
+import AdminBranchManager from '@/views/AdminBranchManager.vue'
+import ExchangeCurrency from '@/views/ExchangeCurrency.vue'
 const routes = [
   {path:'/about',component:()=>import('@/views/AboutView.vue')},
   { path: '/', component: ProductList },
@@ -43,8 +50,48 @@ const routes = [
   { path: '/profile', component: UpdateProfile },
   { path: '/admin-users', component: ManageUsers },
 
-  
-  
+  {
+  path: '/notifications',
+  name: 'ClientNotifications',
+  component: () => import('@/views/ClientNotifications.vue')
+},
+{
+  path: '/admin-notifications',
+  name: 'AdminNotifications',
+  component: () => import('@/views/AdminNotifications.vue')
+},
+{
+  path: '/admin-invoice',
+  name: 'AdminInvoice',
+  component: () => import('@/views/AdminInvoice.vue'),
+  meta: { requiresAuth: true, role: 'admin' }
+}
+, { path: '/admin-shop-status', name: 'AdminShopStatus', component: AdminShopStatus },
+ {
+    path: '/admin/comments',
+    name: 'AdminComments',
+    component: AdminComments,
+    meta: { requiresAuth: true, requiresAdmin: true } // nếu cần phân quyền
+  }
+,
+ {
+  path: '/comments',
+  name: 'AllComments',
+  component: () => import('@/views/AllComments.vue'),
+}
+,{
+    path: '/admin/branches',
+    name: 'AdminBranchManager',
+    component: AdminBranchManager,
+    meta: { requiresAuth: true, role: 'admin' }
+  },
+  { path: '/exchange', name: 'ExchangeCurrency', component: ExchangeCurrency },
+{
+  path: '/payment-info',
+  name: 'PaymentInfo',
+  component: () => import('@/views/BankInfo.vue')
+}
+
 ]
 
 const router = createRouter({
