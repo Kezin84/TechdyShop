@@ -291,6 +291,7 @@ try {
   justify-content: center;
   max-width: 1500px;
   margin: 48px auto 36px auto;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;;
 }
 
 /* SẢN PHẨM */

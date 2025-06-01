@@ -139,7 +139,7 @@ const attrDisplay = (item) => {
   border-radius: 28px;
   box-shadow: 0 10px 42px #44121220;
   padding: 38px 26px 18px 26px;
-  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;;
   animation: fadeInCart .7s cubic-bezier(.61,1.44,.39,1.01);
 }
 @keyframes fadeInCart {

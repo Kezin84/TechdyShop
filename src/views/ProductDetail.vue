@@ -1762,6 +1762,7 @@ h3, .text-danger, .fw-bold, .product-title, .slogan {
   padding: 55px 40px 62px 40px;
   position: relative;
   overflow: visible;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .box {
@@ -2169,6 +2170,8 @@ opacity: 0.5;
   opacity: 0;
   transform: translateY(45px) scale(0.97);
 }
+
+
 
 </style>
 

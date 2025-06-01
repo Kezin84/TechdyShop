@@ -74,8 +74,14 @@ onBeforeUnmount(() => {
   max-width: 1440px;
   margin: 0 auto;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 16px;
   position: relative;
+  box-shadow:
+    0 14px 38px 0 rgba(33, 33, 34, 0.16),     /* Bóng dưới */
+    -18px 0 36px -12px rgba(40,40,60,0.10),/* Bóng trái */
+    18px 0 36px -12px rgba(40,40,60,0.10); /* Bóng phải */
+  /* Có thể thêm transition nếu thích */
+  transition: box-shadow 0.33s cubic-bezier(.4,1,.4,1);
 }
 
 .slider {
@@ -86,7 +92,6 @@ onBeforeUnmount(() => {
 
 .slide {
   min-width: 100%;
-  
 }
 
 .slide img {

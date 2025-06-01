@@ -1748,6 +1748,7 @@ border-radius: 15px;
 
 .container {
   max-width: 1400px !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;;
 }
 
 /* ---- SỬA MỚI: Sidebar trắng, bóng đẹp, chuyên nghiệp ---- */

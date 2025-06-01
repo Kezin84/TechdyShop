@@ -423,6 +423,7 @@ onMounted(() => {
   min-height: 70px;
   z-index: 99;
   border-bottom: 1px solid #eee;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;;
 }
 
 .header-inner {
@@ -579,7 +580,7 @@ onMounted(() => {
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background: linear-gradient(to bottom, #e94504, #fef3f0); /* nền trắng kem pha chút cam */
   overflow-x: hidden;
 }
