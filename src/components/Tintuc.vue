@@ -6,7 +6,7 @@
       <div class="news-marquee-outer">
         <div class="news-marquee-inner" :style="{ animationDuration: marqueeDuration + 's' }">
           <span v-for="(item, idx) in tinTucList" :key="item.ID" class="news-content">
-            {{ item.CONTENT }}
+          <Megaphone size="80" /> {{ item.CONTENT }}
             <span v-if="idx < tinTucList.length - 1" class="mx-3">|</span>
           </span>
         </div>
@@ -48,7 +48,7 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 import axios from 'axios'
-
+import {Megaphone}from 'lucide-vue-next'
 const SHEET_API = 'https://script.google.com/macros/s/AKfycbx9PtKQU7BwVz6jD3I4j-SjBJP7zQWJi-ORmex0YAxsdYB6ZeMrZPdtvhnfjeflfy7GRw/exec'
 
 const tinTucList = ref([])
@@ -125,7 +125,6 @@ function closeLightbox() {
 /* CHỈ width 100%, không dùng 100vw/max-width tại đây */
 .news-marquee-wrap {
   background: transparent;
-  border-bottom: 1.5px solid #ffab91;
   padding: 10px 0 4px 0;
   overflow: hidden;
 }
@@ -141,6 +140,7 @@ function closeLightbox() {
   white-space: nowrap;
   font-size: 2.1rem;
   font-weight: bold;
+  font-style: italic;
   color: #770808;
   text-shadow: 0 2px 8px #fff2, 0 0px 2px #fa8072;
   letter-spacing: 0.04em;

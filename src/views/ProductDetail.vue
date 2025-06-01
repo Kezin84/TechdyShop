@@ -1756,10 +1756,9 @@ h3, .text-danger, .fw-bold, .product-title, .slogan {
   grid-template-rows: auto 1fr;
   gap: 38px 38px;
   max-width: 1220px;
-  margin: 52px auto 0 auto;
-
+  margin: auto auto 0 auto;
   border-radius: 34px;
-  box-shadow: 0 12px 52px #b0040440, 0 2px 26px #fcb04522;
+  box-shadow: 0 12px 52px #5f5e5e40, 0 2px 26px #4e494222;
   padding: 55px 40px 62px 40px;
   position: relative;
   overflow: visible;
@@ -1769,10 +1768,7 @@ h3, .text-danger, .fw-bold, .product-title, .slogan {
 
   border-radius: 25px;
   padding: 36px 32px;
-  box-shadow:
-    0 8px 24px #ffdada90,
-    0 4px 24px #fcb0451f,
-    0 0.5px 8px #b0040420;
+  box-shadow: 0 12px 52px #5f5e5e40, 0 2px 26px #4e494222;
   min-height: 130px;
   position: relative;
   transition: box-shadow 0.2s, transform 0.19s;
@@ -1782,8 +1778,8 @@ h3, .text-danger, .fw-bold, .product-title, .slogan {
 
 .box:hover {
   box-shadow:
-    0 16px 48px #b0040436,
-    0 8px 30px #fcb04533,
+    0 16px 48px #30010136,
+    0 8px 30px #61616033,
     0 2px 15px #fff8eeaa;
   transform: translateY(-3px) scale(1.019);
 }
@@ -1830,13 +1826,13 @@ h3, .text-danger, .fw-bold, .product-title, .slogan {
   border-radius: 19px;
   object-fit: cover;
   margin-bottom: 19px;
-  box-shadow: 0 4px 24px #ffdada7e, 0 2px 8px #fd1d1d23;
-  border: 2.7px solid #fff4f4;
+  box-shadow: 0 12px 52px #5f5e5e40, 0 2px 26px #4e494222;
+  border: 2.7px solid #555454;
   transition: box-shadow 0.18s, border 0.16s, transform 0.16s;
 }
 .img-main:hover {
-  box-shadow: 0 18px 60px #fd1d1d50, 0 6px 25px #fd1d1d2a;
-  border: 2.7px solid #b00404;
+  box-shadow: 0 12px 52px #5f5e5e40, 0 2px 26px #4e494222;
+  border: 2.7px solid #383636;
   transform: scale(1.03);
 }
 
@@ -1849,16 +1845,16 @@ h3, .text-danger, .fw-bold, .product-title, .slogan {
   height: 62px;
   object-fit: cover;
   border-radius: 10px;
-  border: 2.5px solid #fff7f7;
+  border: 1px solid #747272;
   cursor: pointer;
-  box-shadow: 0 1px 8px #ffc3c350;
+  box-shadow: 0 1px 8px #53515150;
   transition: border 0.18s, box-shadow 0.17s, transform 0.16s;
   background: #fff;
 }
 .img-thumbs img.active,
 .img-thumbs img:hover {
-  border: 2.5px solid #6d0404;
-  box-shadow: 0 4px 22px #4b01017a;
+  border: 2.5px solid #777272;
+   box-shadow: 0 12px 52px #5f5e5e40, 0 2px 26px #4e494222;
   transform: scale(1.14);
 }
 
@@ -1968,7 +1964,7 @@ h3, .text-danger, .fw-bold, .product-title, .slogan {
   transition: box-shadow 0.18s, transform 0.16s;
 }
 .box2:hover {
-  box-shadow: 0 16px 56px #b004044c, 0 6px 24px #fd1d1d27, 0 2px 12px #fff8eea0;
+   box-shadow: 0 12px 52px #5f5e5e40, 0 2px 26px #88878722;
   transform: translateY(-2px) scale(1.012);
 }
 
@@ -1979,15 +1975,15 @@ h3, .text-danger, .fw-bold, .product-title, .slogan {
   border-radius: 19px;
   object-fit: cover;
   margin-bottom: 17px;
-  box-shadow: 0 7px 32px #ffdada7e, 0 2px 8px #fd1d1d18;
+   box-shadow: 0 12px 52px #5f5e5e40, 0 2px 26px #4e494222;
   border: 2.7px solid #fff4f4;
   transition: box-shadow 0.19s, border 0.15s, transform 0.15s;
   background: #fff;
   cursor: zoom-in;
 }
 .img-main:hover {
-  box-shadow: 0 18px 60px #fd1d1d47, 0 10px 28px #fd1d1d2a;
-  border: 2.7px solid #b00404;
+  box-shadow: 0 12px 52px #5f5e5e40, 0 2px 26px #4e494222;
+  border: 2.7px solid #747474;
   transform: scale(1.033);
 }
 

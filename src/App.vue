@@ -184,13 +184,13 @@ onMounted(() => {
   updateOrderCount();
 });
 
-const notificationCount = ref()
+const notificationCount = ref(1)
 
 async function updateNotificationCount() {
   const user = JSON.parse(localStorage.getItem('user')) || {}
   const username = user.username || userStore.username
   if (!username) {
-    notificationCount.value = 0
+    notificationCount.value = 1
     return
   }
   try {
@@ -283,18 +283,21 @@ onMounted(() => {
       </RouterLink>
     </div>
     <nav class="main-nav d-flex align-items-center gap-3">
-       <a class="nav-link-clean" href="https://foody88.my.canva.site/food-restaurant-service-website-in-orange-cream-and-white-photographic-style"><House :size="40" class="me-1"/>GIỚI THIỆU</a>
-      <RouterLink to="/comments" class="nav-link-clean"><NotebookPen :size="40" class="me-1" /> REVIEW KHÁCH</RouterLink>
+       <a class="nav-link-clean" href="https://foody88.my.canva.site/food-restaurant-service-website-in-orange-cream-and-white-photographic-style"><House :size="50" class="me-1"/>GIỚI THIỆU</a>
+      <RouterLink to="/comments" class="nav-link-clean"><NotebookPen :size="50" class="me-1" /> REVIEW KHÁCH</RouterLink>
       
       <div class="dropdown position-relative" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
-        <span class="nav-link-clean" :class="{ 'active-scale': router.currentRoute.value.path.includes('/category') }" style="cursor: pointer;" @click="goToCategory('TẤT CẢ')"><PackageSearch :size="40" class="me-1" />SẢN PHẨM</span>
+        <span class="nav-link-clean" :class="{ 'active-scale': router.currentRoute.value.path.includes('/category') }" style="cursor: pointer;" @click="goToCategory('TẤT CẢ')"><PackageSearch :size="50" class="me-1" />SẢN PHẨM</span>
         <ul v-if="showDropdown" class="dropdown-menu show custom-dropdown">
           <li v-for="cat in categories" :key="cat">
             <a class="dropdown-item" @click.prevent="goToCategory(cat)">{{ cat }}</a>
           </li> 
         </ul>
       </div>
-       
+         <RouterLink to="/notifications" class="nav-link-clean" @click.prevent="checkLogin('/notifications')" style="position:relative;">
+  <Bell :size="40" class="me-1"  /> THÔNG BÁO
+  <span v-if="notificationCount > 0" class="cart-badge-vip">{{ notificationCount }}</span>
+</RouterLink>
       <ProductSearch />
     </nav>
   </div>
@@ -303,10 +306,17 @@ onMounted(() => {
   <div class="header-right d-flex align-items-center gap-2">
    
      
-
+<RouterLink to="/exchange" class="nav-link-clean">
+ ĐỔI TIỀN <ArrowRightLeft :size="40" class="me-1"/> 
+</RouterLink>
+<RouterLink to="/payment-info" class="nav-link-clean">
+   CHUYỂN KHOẢN<QrCode  :size="40" class="me-1" />
+ 
+</RouterLink>
 <RouterLink to="/cart" class="nav-link-clean" @click.prevent="checkLogin('/cart')" style="position:relative;">
-  <ShoppingCart :size="40" class="me-1" />
+  GIỎ HÀNG<ShoppingCart :size="40" class="me-1" /> 
   <span v-if="cartCount > 0" class="cart-badge-vip">{{ cartCount }}</span>
+
 </RouterLink>
 
 <RouterLink to="/checkout" class="nav-link-clean" @click.prevent="checkLogin('/checkout')" style="position:relative;">
@@ -319,17 +329,8 @@ onMounted(() => {
   ĐƠN HÀNG<Truck :size="40" class="me-1" /> 
   <span v-if="orderCount > 0" class="cart-badge-vip">{{ orderCount }}</span>
 </RouterLink>
-<RouterLink to="/exchange" class="nav-link-clean">
-  <ArrowRightLeft :size="40" class="me-1"/> ĐỔI TIỀN
-</RouterLink>
-<RouterLink to="/payment-info" class="nav-link-clean">
-   <QrCode  :size="40" class="me-1" />
- CHUYỂN KHOẢN
-</RouterLink>
-  <RouterLink to="/notifications" class="nav-link-clean" @click.prevent="checkLogin('/notifications')" style="position:relative;">
-  <Bell :size="40" class="me-1" />
-  <span v-if="notificationCount > 0" class="cart-badge-vip">{{ notificationCount }}</span>
-</RouterLink>
+
+
     <template v-if="!userStore.isLoggedIn">
       <RouterLink to="/login" class="nav-link-clean" style="background-color: red;color:aqua;font-size:20px;border-radius: 20px;font-style: italic;"> ĐĂNG NHẬP</RouterLink>
       <RouterLink to="/register" class="nav-link-clean" style="background-color: green;color:aqua;font-size:20px;border-radius: 20px;font-style: italic;">ĐĂNG KÝ</RouterLink>
@@ -339,7 +340,7 @@ onMounted(() => {
         <img :src="avatarUrl" alt="Avatar" class="avatar-img me-2" />
          <strong style="color:yellow">{{ userStore.username }}</strong>
       </RouterLink>
-      <button class="btn btn-sm btn-danger ms-2" @click="logout" style="font-weight: bold;">Đăng xuất</button>
+      
     </template>
   </div>
 </div>
@@ -437,7 +438,7 @@ onMounted(() => {
   box-sizing: border-box;
   /* background: none !important; */
      position: relative;
-  right: 250px; /* Hoặc số px mong muốn */
+  right: 300px; /* Hoặc số px mong muốn */
 }
 
 .layout-wrapper {
@@ -584,13 +585,14 @@ body {
 }
 
 .dropdown-menu {
-  
   position: absolute;
   top: 100%;
   left: 0;
   display: block;
   padding: 0;
   border: 1px solid #ddd;
+  border-radius: 10px;
+
   z-index: 10;
 }
 
@@ -598,6 +600,7 @@ body {
   padding: 5px 12px;
   cursor: pointer;
   color: black;
+  font-weight: bold;
 }
 
 .dropdown-item:hover {
