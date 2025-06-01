@@ -11,7 +11,7 @@
       alt="avatar"
       class="avatar-img shadow"
     />
-    <div class="overlay-text">🖊️</div>
+    <div class="overlay-text"><SwitchCamera size ="30"/></div>
   </label>
   <input
     id="avatarInput"
@@ -60,7 +60,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-
+import { ShoppingCart, CreditCard, Banknote, ClipboardList,Truck 
+  ,QrCode ,House ,Star,PackageSearch ,ArrowRightLeft ,NotebookPen ,Bell ,ShieldUser ,Users,SwitchCamera
+}from 'lucide-vue-next'
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx9PtKQU7BwVz6jD3I4j-SjBJP7zQWJi-ORmex0YAxsdYB6ZeMrZPdtvhnfjeflfy7GRw/exec'
 
 const form = ref({

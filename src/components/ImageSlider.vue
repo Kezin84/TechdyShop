@@ -67,6 +67,7 @@ onBeforeUnmount(() => {
   left: 50%;
   position: relative;
   margin-bottom:20px;
+  box-shadow: 5px;
 }
 
 .slider-inner {
@@ -80,10 +81,12 @@ onBeforeUnmount(() => {
 .slider {
   display: flex;
   transition: transform 0.6s ease;
+  
 }
 
 .slide {
   min-width: 100%;
+  
 }
 
 .slide img {
