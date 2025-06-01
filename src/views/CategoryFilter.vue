@@ -478,7 +478,7 @@ const formatPrice = (price) => {
 
 
 const addToCart = (product) => {
-  if (!username) return alert('Bạn cần đăng nhập để thêm vào giỏ hàng!')
+ 
 
   const variant = product._currentVariant
   const quantity = product._SL || 1

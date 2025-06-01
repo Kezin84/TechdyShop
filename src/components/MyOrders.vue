@@ -293,6 +293,7 @@ const statusClass = status => {
   margin: 38px auto 28px;
   box-shadow: 0 16px 36px rgba(68,18,18,0.11), 0 1px 4px #44121222;
   min-height: 70vh;
+  
 }
 .page-title {
   color: rgb(68, 18, 18);
