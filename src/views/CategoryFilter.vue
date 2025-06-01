@@ -981,7 +981,7 @@ onUnmounted(() => {
 
 .card-body {
   padding: 6px 8px;      /* Giảm lại nữa nếu muốn ngắn hơn nữa */
-  background-color: #f7f7f7;
+  background-color: #ffffff;
   border: 1px solid #fcf4e3;
   border-radius: 0 0 20px 20px;
   min-height: unset !important;   /* Không để chiều cao tối thiểu */

@@ -444,6 +444,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  
 }
 
 .admin-layout {
@@ -566,6 +567,7 @@ onMounted(() => {
 
 .site-main {
   flex: 1;
+  background: #f5f3f3;
 }
 
 .site-footer {
@@ -577,7 +579,7 @@ onMounted(() => {
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(to bottom, #fffaf8, #fef3f0); /* nền trắng kem pha chút cam */
+  background: linear-gradient(to bottom, #e94504, #fef3f0); /* nền trắng kem pha chút cam */
   overflow-x: hidden;
 }
 
