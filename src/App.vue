@@ -9,7 +9,7 @@ import ImageSlider from './components/ImageSlider.vue'
 import ChatBotPopup from './components/ChatBotPopup.vue'
 import Tintuc from './components/Tintuc.vue'
 import { ShoppingCart, CreditCard, Banknote, ClipboardList,Truck 
-  ,QrCode ,House ,Star,PackageSearch ,ArrowRightLeft ,NotebookPen 
+  ,QrCode ,House ,Star,PackageSearch ,ArrowRightLeft ,NotebookPen ,Bell 
 } from 'lucide-vue-next'
 const orderCount = ref(0);
 const avatarUrl = ref('')
@@ -183,6 +183,33 @@ async function updateOrderCount() {
 onMounted(() => {
   updateOrderCount();
 });
+
+const notificationCount = ref()
+
+async function updateNotificationCount() {
+  const user = JSON.parse(localStorage.getItem('user')) || {}
+  const username = user.username || userStore.username
+  if (!username) {
+    notificationCount.value = 0
+    return
+  }
+  try {
+    // Tuỳ API, thay action/getNotificationsByUser cho đúng endpoint của bạn!
+    const res = await axios.get(`${SCRIPT_URL}?action=getNotificationsByUser&user=${encodeURIComponent(username)}`)
+    const notiList = res.data || []
+    // Giả sử trường là isRead hoặc status, filter lấy chưa đọc
+    notificationCount.value = notiList.filter(n => !n.isRead || n.status === "UNREAD" || n.isRead === false).length
+  } catch (e) {
+    notificationCount.value = 0
+    console.error('Notification API error:', e)
+  }
+}
+
+onMounted(() => {
+  // Chỉ user thường (không admin)
+  if (userStore.role !== 'admin') updateNotificationCount()
+})
+
 </script>
 
 <template>
@@ -267,9 +294,7 @@ onMounted(() => {
           </li> 
         </ul>
       </div>
-       <RouterLink to="/exchange" class="nav-link-clean">
-  <ArrowRightLeft :size="40" class="me-1"/> ĐỔI TIỀN
-</RouterLink>
+       
       <ProductSearch />
     </nav>
   </div>
@@ -277,9 +302,8 @@ onMounted(() => {
   <!-- USER-INFO PHẢI -->
   <div class="header-right d-flex align-items-center gap-2">
    
-      <RouterLink to="/notifications" class="nav-link-clean" @click.prevent="checkLogin('/notifications')">
-      <i class="fa-regular fa-bell fa-2xl"></i>
-    </RouterLink>
+     
+
 <RouterLink to="/cart" class="nav-link-clean" @click.prevent="checkLogin('/cart')" style="position:relative;">
   <ShoppingCart :size="40" class="me-1" />
   <span v-if="cartCount > 0" class="cart-badge-vip">{{ cartCount }}</span>
@@ -295,12 +319,17 @@ onMounted(() => {
   ĐƠN HÀNG<Truck :size="40" class="me-1" /> 
   <span v-if="orderCount > 0" class="cart-badge-vip">{{ orderCount }}</span>
 </RouterLink>
-
+<RouterLink to="/exchange" class="nav-link-clean">
+  <ArrowRightLeft :size="40" class="me-1"/> ĐỔI TIỀN
+</RouterLink>
 <RouterLink to="/payment-info" class="nav-link-clean">
    <QrCode  :size="40" class="me-1" />
  CHUYỂN KHOẢN
 </RouterLink>
-  
+  <RouterLink to="/notifications" class="nav-link-clean" @click.prevent="checkLogin('/notifications')" style="position:relative;">
+  <Bell :size="40" class="me-1" />
+  <span v-if="notificationCount > 0" class="cart-badge-vip">{{ notificationCount }}</span>
+</RouterLink>
     <template v-if="!userStore.isLoggedIn">
       <RouterLink to="/login" class="nav-link-clean" style="background-color: red;color:aqua;font-size:20px;border-radius: 20px;font-style: italic;"> ĐĂNG NHẬP</RouterLink>
       <RouterLink to="/register" class="nav-link-clean" style="background-color: green;color:aqua;font-size:20px;border-radius: 20px;font-style: italic;">ĐĂNG KÝ</RouterLink>
@@ -308,9 +337,9 @@ onMounted(() => {
     <template v-else>
       <RouterLink to="/profile" class="nav-link-clean">
         <img :src="avatarUrl" alt="Avatar" class="avatar-img me-2" />
-         <strong>{{ userStore.username }}</strong>
+         <strong style="color:yellow">{{ userStore.username }}</strong>
       </RouterLink>
-      <button class="btn btn-sm btn-danger ms-2" @click="logout">Đăng xuất</button>
+      <button class="btn btn-sm btn-danger ms-2" @click="logout" style="font-weight: bold;">Đăng xuất</button>
     </template>
   </div>
 </div>
@@ -883,8 +912,8 @@ color: #ddd;
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #fff;
-  background: #eee;
+  border: 2px solid #faf600;
+  background: #eeeeee;
   margin-right: 6px;
 }
 

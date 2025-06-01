@@ -26,9 +26,21 @@
           {{ item.title }}
         </h5>
         <img v-if="item.image" :src="item.image" alt="img" class="notices-vip-image" />
-        <p class="notices-vip-meta">
-          🕒 {{ item.date }} | 👤 {{ item.sender }} | 🎯 {{ item.target }}
-        </p>
+       <div class="notices-meta-flex">
+  <span class="notices-chip time">
+    <i class="fa-regular fa-clock me-1"></i>
+    {{ formatTime(item.date) }}
+  </span>
+  <span class="notices-chip role">
+   <ShieldUser size="30" /> 
+    {{ item.sender }}
+  </span>
+  <span class="notices-chip target">
+   <Users size="30 "/>
+    {{ item.target }}
+  </span>
+</div>
+
         <div class="notices-vip-content">{{ item.content }}</div>
       </div>
     </transition-group>
@@ -37,10 +49,25 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-
+import { ShoppingCart, CreditCard, Banknote, ClipboardList,Truck 
+  ,QrCode ,House ,Star,PackageSearch ,ArrowRightLeft ,NotebookPen ,Bell ,ShieldUser ,Users
+} from 'lucide-vue-next'
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx9PtKQU7BwVz6jD3I4j-SjBJP7zQWJi-ORmex0YAxsdYB6ZeMrZPdtvhnfjeflfy7GRw/exec'
 const notices = ref([])
 const loading = ref(false)
+
+function formatTime(iso) {
+  if (!iso) return ''
+  // Tự động cắt bớt phần thừa và đổi format ngày giờ dễ nhìn
+  const d = new Date(iso)
+  if (isNaN(d)) return iso
+  return d.toLocaleString('vi-VN', {
+    hour12: false,
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit'
+  })
+}
+
 
 const fetchNotices = async () => {
   loading.value = true
@@ -62,6 +89,7 @@ const filteredNotices = computed(() => {
 })
 
 onMounted(fetchNotices)
+
 </script>
 
 <style scoped>
@@ -223,4 +251,34 @@ onMounted(fetchNotices)
 .animate-card-in { animation: slideUp 0.7s cubic-bezier(.25,1.3,.5,1);}
 @keyframes fadeIn { from { opacity: 0;} to { opacity: 1;} }
 .animate-fade { animation: fadeIn 0.75s; }
+
+.notices-meta-flex {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.notices-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.97em;
+  font-weight: 700;
+  padding: 2.5px 12px 2.5px 8px;
+  border-radius: 13px;
+  background: #ffe3d1;
+  color: #5d2a00;
+  box-shadow: 0 1.5px 6px #ed373728;
+  border: 1.5px solid #f7d9c0;
+  opacity: 0.96;
+  letter-spacing: 0.02em;
+  margin-right: 3px;
+  margin-bottom: 3px;
+}
+.notices-chip.time   { background: #fff3e1; color: #c16a00; border-color: #ffd590; }
+.notices-chip.role   { background: #f9ebff; color: #7e41ab; border-color: #c7a6ef; }
+.notices-chip.target { background: #e6f7fa; color: #0585ad; border-color: #7be0ff; }
+.notices-chip i { margin-right: 3px; font-size: 1.02em; }
+
 </style>
