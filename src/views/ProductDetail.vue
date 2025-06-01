@@ -319,7 +319,12 @@
 
 
 <SuccessDialog ref="dialogRef" message="Đã thêm vào giỏ hàng!" />
-<ErrorDialog ref="errorDialogRef" message="Thêm vào giỏ hàng thất bại!" />
+<ErrorDialog
+  ref="errorDialogRef"
+  message="Vui lòng đăng nhập hoặc đăng kí để thêm vào giỏ hàng"
+  @ok="goToLogin"
+/>
+
   </template>
   
   <script setup>
@@ -575,8 +580,14 @@ const addToCart = () => {
 
   } catch (e) {
     errorDialogRef.value.open()
+    router.push('/login')
   }
 }
+const goToLogin = () => {
+  router.push('/login')
+}
+
+
 
 const formatPrice = (price) => {
   if (typeof price === "string") price = Number(price)

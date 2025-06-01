@@ -1225,8 +1225,7 @@ input[type="number"] {
   height: 210px;
   object-fit: cover;
   width: 100%;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+border-radius: 15px;
   background: #fdf6f2;
   box-shadow: 0 2px 24px 0 rgba(253,29,29,0.05);
   aspect-ratio: 1/1;

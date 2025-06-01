@@ -26,7 +26,13 @@ function handleOk() {
   show.value = false
   emit('ok')
 }
+function closeDialog() {
+  show.value = false
+}
 defineExpose({ open })
+
+
+
 </script>
 
 <style scoped>
