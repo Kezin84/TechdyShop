@@ -954,23 +954,19 @@ onUnmounted(() => {
   overflow: visible !important; /* ✅ không chặn bóng */
   position: relative; /* ✅ đảm bảo bóng hiển thị đúng */
   z-index: 1;
+
 }
 
 .card:hover img {
-  transform: scale(1.07);
+  transform: scale(1.2);
   box-shadow:
-    0 0 12px rgba(255, 60, 60, 0.6),
-    0 0 20px rgba(255, 90, 90, 0.4),
-    0 0 32px rgba(255, 120, 120, 0.2);
-  border: 2px solid rgba(255, 90, 90, 0.5);
+    0 0 12px rgba(17, 17, 17, 0.6);
+   
+  border: 2px solid rgba(97, 94, 94, 0.5);
 }
 .card:hover {
-  transform: translateY(-6px) scale(1.07);
-  box-shadow:
-    0 12px 24px rgba(0, 0, 0, 0.1),
-    0 0 12px rgba(255, 60, 60, 0.6),
-    0 0 20px rgba(255, 90, 90, 0.4),
-    0 0 32px rgba(255, 120, 120, 0.2);
+  transform: translateY(-6px) scale(1.1);
+ box-shadow: 0 8px 32px 0 rgba(253,29,29,0.09); /* Bóng rõ khi hover card */
   border: 2px solid rgba(255, 90, 90, 0.5);
   transition: all 0.3s ease;
   cursor: pointer;
@@ -980,11 +976,13 @@ onUnmounted(() => {
 
 
 .card-body {
-  padding: 6px 8px;      /* Giảm lại nữa nếu muốn ngắn hơn nữa */
+  padding: 8px 16px;      /* Giảm lại nữa nếu muốn ngắn hơn nữa */
   background-color: #ffffff;
   border: 1px solid #fcf4e3;
   border-radius: 0 0 20px 20px;
   min-height: unset !important;   /* Không để chiều cao tối thiểu */
+    box-shadow: 0 4px 16px 0 rgba(0,0,0,0.08);    /* Bóng nhẹ */
+ 
 }
 
 .card-body h6,
@@ -993,6 +991,7 @@ onUnmounted(() => {
 .card-body .mb-2,
 .card-body .mb-3 {
   margin-bottom: 4px !important;
+  
 }
 
 
@@ -1079,6 +1078,7 @@ input[type="number"] {
 }
 .card:hover img {
   transform: scale(1.05);
+  
 }
 
 .btn-outline-secondary {
