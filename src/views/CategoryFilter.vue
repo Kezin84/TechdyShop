@@ -1,6 +1,68 @@
 <template>
 
 
+<!-- SIDEBAR FIXED BÊN TRÁI -->
+<div class="sidebar-fixed-ecom" v-show="showSidebar">
+  <!-- Card Chi nhánh -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-header fw-bold">Chi nhánh</div>
+    <ul class="list-group list-group-flush">
+      <li
+        class="list-group-item"
+        :class="{ active: branchFilter === '' }"
+        @click="selectBranch('')"
+      >Tất cả</li>
+      <li
+        class="list-group-item"
+        v-for="branch in allBranches"
+        :key="branch"
+        :class="{ active: branchFilter === branch }"
+        @click="selectBranch(branch)"
+      >
+        {{ branch }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Card Danh mục -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-header fw-bold">Danh mục</div>
+    <ul class="list-group list-group-flush">
+      <li
+        class="list-group-item"
+        :class="{ active: currentCategory === 'TẤT CẢ' }"
+        @click="selectCategory('TẤT CẢ')"
+      >Tất cả</li>
+      <li
+        class="list-group-item"
+        v-for="cat in allCategories"
+        :key="cat"
+        :class="{ active: currentCategory === cat }"
+        @click="selectCategory(cat)"
+      >
+        {{ cat }}
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- NÚT ẨN/HIỆN SIDEBAR -->
+<!-- Nút toggle sidebar -->
+<button
+  class="toggle-sidebar-btn"
+  :class="{ opened: showSidebar }"
+  @click="showSidebar = !showSidebar"
+>
+  <!-- Nếu sidebar đang ẩn: -->
+  <span v-if="!showSidebar" class="toggle-label">
+   DANH MỤC <CircleChevronRight size="35" /> 
+  </span>
+  <!-- Nếu sidebar đang hiện: -->
+  <span v-else class="toggle-label">
+    <CircleArrowLeft size="40"  class="toggle-icon"  /> 
+  </span>
+</button>
+
    <div class="container py-3 position-relative">
     <!-- MODAL CHỌN CHI NHÁNH -->
 <div v-if="showBranchModal" class="modal-branch-backdrop">
@@ -24,64 +86,10 @@
     <ImageSlider />
 
     <div class="row">
-      <!-- SIDEBAR BÊN TRÁI -->
-      <div class="col-lg-3 col-md-4 sidebar-slidein" >
-        <!-- BẢNG CHI NHÁNH -->
-        <div class="card mb-4 shadow-sm" >
-       <div class="card-header fw-bold" style="  background: rgb(68, 18, 18)">
-  <i class="fa-regular fa-map"></i> CHI NHÁNH
-</div>
-          <ul class="list-group list-group-flush">
-            <li
-              class="list-group-item"
-              :class="{active: branchFilter === ''}"
-              @click="selectBranch('')"
-              style="cursor:pointer"
-            >
-              Tất cả
-            </li>
-            <li
-              v-for="branch in allBranches"
-              :key="branch"
-              class="list-group-item"
-              :class="{active: branchFilter === branch}"
-              @click="selectBranch(branch)"
-              style="cursor:pointer"
-            >
-              {{ branch }}
-            </li>
-          </ul>
-        </div>
-        <!-- BẢNG DANH MỤC -->
-        <div class="card shadow-sm">
-    <div class="card-header fw-bold" id="headerSidebar">
-  <i class="fa-regular fa-rectangle-list"></i> DANH MỤC HÀNG HÓA
-</div>
-          <ul class="list-group list-group-flush">
-            <li
-              class="list-group-item"
-              :class="{active: currentCategory === 'TẤT CẢ'}"
-              @click="selectCategory('TẤT CẢ')"
-              style="cursor:pointer;"
-            >
-              TẤT CẢ
-            </li>
-            <li
-              v-for="cat in allCategories"
-              :key="cat"
-              class="list-group-item"
-              :class="{active: currentCategory === cat}"
-              @click="selectCategory(cat)"
-              style="cursor:pointer"
-            >
-              {{ cat }}
-            </li>
-          </ul>
-        </div>
-      </div>
+   
 
       <!-- DANH SÁCH SẢN PHẨM BÊN PHẢI -->
-      <div class="col-lg-9 col-md-8">
+      
         <!-- DANH MỤC & SẮP XẾP -->
         <h6 class="mb-3 sidebar-slidein">
           <i class="fa-regular fa-rectangle-list"></i> Danh mục: <strong>{{ currentCategory }}</strong>
@@ -129,7 +137,7 @@
           <!-- Nếu đã load xong thì hiện sản phẩm thật -->
           <template v-else>
             <div
-               class="col-2-4 col-md-3 col-sm-4 col-6 mb-4"
+               class="col-2-4 mb-4"
               v-for="product in visibleProducts"
               :key="product.ID"
             >
@@ -140,7 +148,7 @@
 >
                 <!-- Nhãn dán trên ảnh -->
                <RouterLink :to="`/product/${product.ID}`" class="text-decoration-none text-dark">
-  <div class="image-stack" style="position: relative; width:100%; aspect-ratio:1/1; min-height:220px; max-height:250px;">
+  <div class="image-stack" style="position: relative; width:100%; aspect-ratio:1/1; min-height:250px; max-height:300px;">
     <!-- NHÃN LUÔN FIXED TRÊN ẢNH -->
     <span
       v-if="product['NHÃN']"
@@ -172,86 +180,104 @@
                   style="cursor:pointer"
                 >
                   <!-- Tên sản phẩm -->
-                  <h6 class="fw-bold text-uppercase">{{ product['TÊN SẢN PHẨM'] }}</h6>
-                  <!-- Tình trạng -->
-                  <span
-                    v-if="product._currentVariant['TÌNH TRẠNG']"
-                    class="status-badge"
-                    :class="statusClass(product._currentVariant['TÌNH TRẠNG'])"
-                  >
-                    {{ product._currentVariant['TÌNH TRẠNG'] }}
-                  </span>
-           
-                  <!-- Đánh giá sao -->
-                  <p class="mb-1" style="font-size: 25px;font-weight: bold;">
-                    <span
-                      v-for="i in 5"
-                      :key="i"
-                      :style="{
-                        color: i <= Math.round(product._currentVariant['ĐÁNH GIÁ'] || 5) ? '#ffc107' : '#e0e0e0',
-                        marginRight: '2px'
-                      }"
-                    >
-                      ★
-                    </span>
-                  </p>
-                  <!-- Lượt mua -->
-                  <p style="color: rgb(217, 2, 2); font-weight: bold;">
-                    🛒 {{ product._currentVariant['LƯỢT MUA'] }} lượt mua
-                  </p>
+<h6 class="fw-bold text-uppercase">{{ product['TÊN SẢN PHẨM'] }}</h6>
+
+ <span
+    v-if="product._currentVariant['TÌNH TRẠNG']"
+    class="status-badge"
+    :class="statusClass(product._currentVariant['TÌNH TRẠNG'])"
+  >
+    {{ product._currentVariant['TÌNH TRẠNG'] }}
+  </span>
+<!-- Tình trạng + Đánh giá: nằm cùng hàng -->
+<div class="d-flex align-items-center justify-content-between mb-1" style="gap: 1px;">
+  <!-- Tình trạng -->
+ 
+  <!-- Đánh giá -->
+  <span>
+    <span
+      v-for="i in 5"
+      :key="i"
+      :style="{ color: i <= Math.round(product._currentVariant['ĐÁNH GIÁ'] || 5) ? '#ffc107' : '#e0e0e0', marginRight: '2px' }"
+    >★</span>
+    <span class="text-muted small ms-1">({{ product._currentVariant['ĐÁNH GIÁ'] || 5 }})</span>
+  </span>
+  <span class="text-nowrap ms-2" style="color: rgb(217, 2, 2); font-weight: bold; font-size:15px;">
+     {{ product._currentVariant['LƯỢT MUA'] || 0 }} lượt mua
+    </span>
+</div>
+
+                  
                   <!-- Filter thuộc tính -->
                   <div class="mb-3">
                     <div v-for="attr in getVisibleAttributes(product)" :key="attr" class="mb-2">
-                      <div class="small text-muted fw-bold">{{ attr }}:</div>
-                      <div class="d-flex flex-wrap gap-1">
-                        <button
-                          v-for="value in getAvailableOptions(product, attr)"
-                          :key="value"
-                          class="btn btn-sm fw-bold"
-                          :class="product._selectedFilters[attr] === value ? 'btn-primary' : 'btn-outline-secondary'"
-                          @click="selectFilter(product, attr, value)"
-                        >
-                          {{ value }}
-                        </button>
-                      </div>
-                    </div>
+  <span class="attr-label">{{ attr }}:</span>
+  <div class="d-flex flex-wrap filter-attr-group">
+    <button
+      v-for="value in getAvailableOptions(product, attr)"
+      :key="value"
+      class="filter-btn"
+      :class="{ selected: product._selectedFilters[attr] === value }"
+      @click="selectFilter(product, attr, value)"
+    >
+      {{ value }}
+    </button>
+  </div>
+</div>
+
                   </div>
                   <!-- Giá, kho -->
-                  <div class="mb-2">
-                    <span
-                      v-if="Number(product._currentVariant['KHUYẾN MÃI']) > 0"
-                      class="text-muted text-decoration-line-through me-2 fs-6"
-                    >
-                      {{ Math.round(Number(product._currentVariant['GIÁ']) / (1 - Number(product._currentVariant['KHUYẾN MÃI']) / 100)) }}₱
-                    </span>
-                    <span v-if="product._currentVariant['KHUYẾN MÃI'] > 0" class="badge bg-warning text-dark">
-                      -{{ product._currentVariant['KHUYẾN MÃI'] }}%
-                    </span>
-                    <span class="fs-4 fw-bold text-danger">
-                      {{  formatPrice(product._currentVariant['GIÁ'] )}}₱
-                    </span>
-                    <p class="small" style="color: brown;font-weight: bold;">Kho: {{ product._currentVariant['SỐ LƯỢNG'] }}</p>
-                  </div>
+              <!-- Giá, khuyến mãi và lượt mua (tách 2 dòng chuẩn e-commerce) -->
+<div>
+  <!-- Dòng 1: Giá gạch + badge khuyến mãi -->
+  <div class="d-flex align-items-center mb-1 ">
+    <span
+      v-if="Number(product._currentVariant['KHUYẾN MÃI']) > 0"
+      class=" text-decoration-line-through me-2 fs-6"
+      style="line-height: 1 ;color:#441212"
+    >
+      {{ Math.round(Number(product._currentVariant['GIÁ']) / (1 - Number(product._currentVariant['KHUYẾN MÃI']) / 100)) }}₱
+    </span>
+    <span
+      v-if="product._currentVariant['KHUYẾN MÃI'] > 0"
+      class="badge bg-warning text-dark"
+      style="font-size:13px; font-weight: bold;"
+    >
+      -{{ product._currentVariant['KHUYẾN MÃI'] }}%
+    </span>
+  </div>
+  <!-- Dòng 2: Giá bán -->
+  <div class="d-flex align-items-center justify-content-between " >
+    <span class="fs-5 fw-bold" style="color: #c62828">
+      {{ formatPrice(product._currentVariant['GIÁ']) }}₱
+    </span>
+    
+  </div>
+</div>
+
+
                   <!-- Số lượng + Nút mua -->
                   <div class="mt-auto">
                     <template v-if="product._currentVariant['SỐ LƯỢNG'] > 0">
-                      <div class="d-flex align-items-center gap-2 mb-2">
-                        <button class="btn btn-outline-secondary btn-sm" @click.stop="decrease(product)">-</button>
-                        <input
-                          type="number"
-                          class="form-control form-control-sm text-center"
-                          v-model.number="product._SL"
-                          :max="product._currentVariant['SỐ LƯỢNG']"
-                          :min="1"
-                          style="width: 50px;"
-                          @click.stop
-                        />
-                        <button class="btn btn-outline-secondary btn-sm" @click.stop="increase(product)">+</button>
-                      </div>
+                   <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+  <div class="d-flex align-items-center">
+    <button class="btn-qty " @click.stop="decrease(product)">-</button>
+    <input type="number" class="input-qty" v-model.number="product._SL"
+           :max="product._currentVariant['SỐ LƯỢNG']"
+           :min="1" @click.stop />
+    <button class="btn-qty " @click.stop="increase(product)">+</button>
+  </div>
+  <span class="small" style="color: brown; font-weight: bold;">
+    Kho: {{ product._currentVariant['SỐ LƯỢNG'] }}
+  </span>
+</div>
+
+
                       <button class="btn custom-addtocart w-100 btn-sm fw-bold d-flex justify-content-center align-items-center gap-2" @click.stop="addToCart(product)">
                         THÊM VÀO GIỎ
                       </button>
                       <p class="small mb-2 branch-green">
+                        
                         <strong>Chi nhánh:</strong> {{ product._currentVariant['CHI NHÁNH'] || 'Không rõ' }}
                       </p>
                     </template>
@@ -269,7 +295,7 @@
           <button class="btn custom-loadmore fw-bold px-4" @click="loadMore">Xem thêm</button>
         </div>
       </div>
-    </div>
+    
     <!-- CART PANEL -->
 <div v-if="showCartPanel" class="cart-panel shadow">
   <div class="cart-panel-header d-flex justify-content-between align-items-center mb-3">
@@ -343,7 +369,7 @@ import { ref, computed, onMounted, watch,watchEffect ,onUnmounted } from 'vue'
 import { useRoute,useRouter  } from 'vue-router'
 import axios from 'axios'
  import ImageSlider from '@/components/ImageSlider.vue'
-
+import {List ,ChevronLeft,CircleChevronRight,CircleArrowLeft  } from 'lucide-vue-next'
 const showCartPanel = ref(false)
 const cartItems = ref([])
 const cartTotal = computed(() =>
@@ -816,6 +842,13 @@ watch([sortedProducts, visibleCount], () => {
 onUnmounted(() => {
   Object.values(imageIntervals).forEach(clearInterval)
 })
+
+const showSidebar = ref(true);
+
+// Tự động ẩn sidebar nếu là mobile
+onMounted(() => {
+  if (window.innerWidth < 992) showSidebar.value = false;
+});
 </script>
 
 
@@ -997,7 +1030,7 @@ onUnmounted(() => {
 
 
 .custom-addtocart {
-  background:rgb(217, 2, 2) !important;
+  background:rgb(68, 18, 18) !important;
   border: none;
   color: white;
   font-weight: bold;
@@ -1027,7 +1060,7 @@ onUnmounted(() => {
 }
 
 h6 {
-  color: #ed3737;
+  
   font-weight: bold;
   font-size: 20px;
 }
@@ -1115,17 +1148,6 @@ input[type="number"] {
   box-shadow: 0 8px 28px 0 rgba(253,29,29,0.12), 0 4px 10px 0 #fff3;
 }
 
-.card-header.fw-bold {
-  background: rgb(68, 18, 18) !important; /* Nền nâu đậm */
-  color: #fff !important;                 /* Chữ trắng */
-  border-bottom: 1.5px solid #fce4e4;
-  border-radius: 22px 22px 0 0;
-  box-shadow: none;
-  padding: 18px 22px 13px 22px;
-  font-weight: bold;
-  font-size: 18px;
-  letter-spacing: 0.8px;
-}
 
 
 /* List-group in sidebar */
@@ -1142,18 +1164,7 @@ input[type="number"] {
   box-shadow: 0 8px 28px 0 rgba(253,29,29,0.12), 0 4px 10px 0 #fff3;
 }
 
-.card-header.fw-bold {
-  font-size: 17px;
-  letter-spacing: 1px;
-  border-bottom: 1px solid #ffebee;
-  background: rgb(68, 18, 18) !important;
-  color: #fff !important;
-  border-radius: 18px 18px 0 0;
-  box-shadow: 0 1px 0 rgba(252,176,69,0.10);
-  padding: 14px 20px;
-  margin-bottom: 0;
-  font-weight: 600;
-}
+
 
 /* List-group in sidebar */
 .list-group.list-group-flush {
@@ -1227,8 +1238,9 @@ input[type="number"] {
   width: 100%;
 border-radius: 15px;
   background: #fdf6f2;
-  box-shadow: 0 2px 24px 0 rgba(253,29,29,0.05);
+  box-shadow: 0 2px 24px 0 rgba(109, 108, 108, 0.05);
   aspect-ratio: 1/1;
+  border: 2.5px solid #dad7d7;
 }
 
 .product-title {
@@ -1772,7 +1784,7 @@ border-radius: 15px;
 
 /* Header của card sidebar: Trắng hoàn toàn, chữ đỏ */
 .card-header.fw-bold {
-  background:rgb(176, 4, 4) !important;
+  background: rgb(68, 18, 18);
   color: #ffffff !important;
   border-bottom: 1.5px solid #fce4e4;
   border-radius: 22px 22px 0 0;
@@ -1791,7 +1803,7 @@ border-radius: 15px;
 }
 .list-group-item {
   background: #fafafa;
-  color: rgb(176, 4, 4);
+  color: rgb(68, 18, 18);
   border: none;
   border-radius: 13px;
   margin: 6px 12px;
@@ -1882,6 +1894,175 @@ border-radius: 15px;
   to {
     opacity: 0;
     transform: translateY(10px) scale(0.96);
+  }
+}
+
+.btn-qty {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgb(68, 18, 18);
+  outline: none;
+  background: transparent;
+  box-shadow: 0 1.5px 6px #0001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.13rem;
+  font-weight: 800;
+  color: #130202;
+  cursor: pointer;
+  transition: background 0.17s, box-shadow 0.16s, color 0.13s, transform 0.12s;
+  user-select: none;
+  margin: 0 3px;
+}
+
+.btn-qty:active {
+  filter: brightness(0.93);
+  transform: scale(0.93);
+}
+
+.btn-qty:hover, .btn-qty:focus {
+  background: #b00404;
+  color: #fff;
+  border-color: #b00404;
+}
+
+.input-qty {
+  width: 38px;
+  height: 28px;
+  border-radius: 12px;
+  border: 1.5px solid #e0e0e0;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0 2px;
+  transition: border 0.13s;
+  outline: none;
+  background: #fffdfa;
+  color: #290303;
+  padding: 0 2px;
+}
+
+
+.filter-btn {
+  border: 1.5px solid rgb(68, 18, 18);
+  background: #fffbf8;
+  color: rgb(68, 18, 18);
+  border-radius: 13px;
+  font-weight: 700;
+  font-size: 1em;
+  padding: 2.5px 13px;
+  margin-right: 6px;
+  margin-bottom: 4px;
+  transition: background 0.15s, color 0.15s, border 0.15s, box-shadow 0.14s;
+  box-shadow: 0 1.5px 5px #c9c9c921;
+  outline: none;
+}
+.filter-btn:hover,
+.filter-btn:focus {
+  background: #b00404;        /* đỏ bã trầu */
+  color: #fff;
+  border-color: #b00404;
+}
+
+.filter-btn:focus {
+ border: 1.5px solid rgb(68, 18, 18);
+  background: #fffbf8;
+  color: rgb(68, 18, 18);
+
+}
+/* Khi đã chọn */
+.filter-btn.selected,
+.filter-btn.active {
+  background: #442a12;        /* nâu đà */
+  color: #fff;
+  border-color: #613b1a;
+  box-shadow: 0 2px 9px #b004043a;
+}
+
+.attr-label {
+  font-size: 0.97em;
+  font-weight: bold;
+  font-style: italic;
+  color: #995d45;      /* Nâu nhạt, dễ nhìn */
+  margin-bottom: 3px;
+  margin-top: 7px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  display: block;
+}
+
+.sidebar-fixed-ecom {
+  position: fixed;
+  top: 100px; /* chỉnh đúng chiều cao header của bạn */
+  left: 0;
+  width: 250px;  /* tuỳ ý, nhưng thường 220-270px là vừa */
+  height: calc(100vh - 70px);
+  z-index: 1002;
+  background: transparent;
+  padding: 0 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  pointer-events: auto;
+}
+
+.sidebar-fixed-ecom .card {
+  border-radius: 18px;
+  box-shadow: 0 8px 32px 0 rgba(253,29,29,0.11), 0 1.5px 7px 0 #fff;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 991.98px) {
+  .sidebar-fixed-ecom {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 0;
+    z-index: 1;
+  }
+}
+
+.toggle-sidebar-btn {
+  position: fixed;
+  top: 180px;
+  left: 10px;
+  z-index: 1200;
+  background: #420505;
+  color: #fff;
+  border: none;
+  border-radius: 22px;
+  padding: 9px 19px 9px 13px;
+  font-weight: bold;
+  font-size: 1.15em;
+  box-shadow: 0 2px 18px #b0040455;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: background 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+.toggle-sidebar-btn.opened {
+  left: 260px; /* Đẩy nút ra ngoài sidebar khi đã mở */
+  background: #fff;
+  color: #b00404;
+  box-shadow: 0 2px 14px #b0040440;
+}
+
+@media (max-width: 991.98px) {
+  .toggle-sidebar-btn {
+    top: 80px;
+    left: 10px;
+    font-size: 1.09em;
+    padding: 7px 15px 7px 11px;
+    border-radius: 16px;
+  }
+  .toggle-sidebar-btn.opened {
+    left: 95vw;
   }
 }
 

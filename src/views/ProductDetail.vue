@@ -33,6 +33,8 @@
       <!-- Box 1: TÊN SẢN PHẨM -->
       <div class="box box1">
         <h3 class="product-title">{{ product['TÊN SẢN PHẨM'] }}</h3>
+       
+
       </div>
       <!-- Box 3: MÔ TẢ -->
       <div class="box box3">
@@ -69,7 +71,7 @@
       <!-- Box 4: THÔNG TIN CÒN LẠI -->
       <div class="box box4">
         <h2>THÔNG TIN SẢN PHẨM</h2>
-       
+        
         <!-- Bộ lọc thuộc tính -->
         <div v-for="(values, key) in filters" :key="key" v-show="values.length > 0" class="mb-3 filter-block">
           <div class="filter-label">{{ key }}:</div>
@@ -86,23 +88,24 @@
           </div>
         </div>
         <!-- Badges và info -->
-        <div class="product-badges d-flex flex-wrap gap-2 mb-3">
-          <span class="badge-info badge-gift">🎁 <b>Khuyến mãi:</b> {{ product['KHUYẾN MÃI'] }}%</span>
-          <span class="badge-info badge-hot">🔥 <b>Lượt mua:</b> {{ product['LƯỢT MUA'] }}</span>
-          <span class="badge-info badge-star">
-            ⭐ <b>Đánh giá:</b>
-            <span>
-              <span v-for="n in 5" :key="n" :style="{ color: n <= Math.round(avgRating) ? '#f7c948' : '#ccc' }">★</span>
-              <span class="badge-rating-text">({{ avgRating }}/5)</span>
-            </span>
-          </span>
-          <span class="badge-info badge-status">📦 <b>Tình trạng:</b> {{ product['TÌNH TRẠNG'] }}</span>
-          <span
-            v-for="(branch, i) in branchList"
-            :key="i"
-            class="badge-info badge-branch"
-          >🏢 <b>Chi nhánh có hàng:</b> {{ branch }}</span>
-        </div>
+       <div class="product-badges d-flex flex-wrap gap-2 mb-3">
+  <span class="badge-minimal badge-buy">
+    🔥 <b>Lượt mua:</b> {{ product['LƯỢT MUA'] }}
+  </span>
+  <span class="badge-minimal badge-star">
+    ⭐ <b>Đánh giá:</b>
+    <span>
+      <span v-for="n in 5" :key="n" :style="{ color: n <= Math.round(avgRating) ? '#FFD600' : '#BBB' }">★</span>
+      <span class="badge-rating-text">({{ avgRating }}/5)</span>
+    </span>
+  </span>
+  <span class="badge-minimal badge-status">
+    📦 <b>Tình trạng:</b> {{ product['TÌNH TRẠNG'] }}
+  </span>
+  <span v-for="(branch, i) in branchList" :key="i" class="badge-minimal badge-branch">
+    🏢 <b>Chi nhánh:</b> {{ branch }}
+  </span>
+</div>
         <!-- Số lượng & nút giỏ hàng -->
         <label class="form-label fw-semibold text-dark">Số lượng:</label>
         <div class="d-flex align-items-center gap-2 mb-2">
@@ -116,8 +119,9 @@
             style="width: 60px; text-align: center;"
           />
           <button class="btn btn-outline-secondary btn-sm" @click="increaseQty">+</button>
+          <h5 class="text-muted small">Còn lại: {{ product['SỐ LƯỢNG'] }}</h5>
         </div>
-        <p class="text-muted small">Còn lại: {{ product['SỐ LƯỢNG'] }}</p>
+        
          <!-- Giá và khuyến mãi -->
         <div class="mb-2">
           <span v-if="fakeOriginalPrice > formatPrice(product['GIÁ'])" class="text-muted text-decoration-line-through me-2 fs-6">{{ fakeOriginalPrice }}₱</span>
@@ -1258,7 +1262,7 @@ h3, .text-danger, .fw-bold, .product-title, .slogan {
 /* ===== FILTER LABEL ===== */
 .filter-label {
   font-weight: 700;
-  color: #b00404;
+  color: #363636;
   margin-bottom: 6px;
   letter-spacing: .03em;
 }
@@ -1330,7 +1334,7 @@ h3, .text-danger, .fw-bold, .product-title, .slogan {
 
 .filter-label {
   font-weight: 800;
-  color: #b00404;
+  color: #490e0e;
   font-size: 1.09em;
   letter-spacing: .03em;
   margin-bottom: 4px;
@@ -2172,6 +2176,94 @@ opacity: 0.5;
 }
 
 
+.badge-minimal {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff8de; /* Text sáng nhẹ, không bị gắt */
+  font-weight: 600;
+  font-size: 1em;
+  border-radius: 14px;
+  padding: 7px 17px 7px 15px;
+  border: 1.3px solid #573016;
+  box-shadow: none;
+  margin-bottom: 5px;
+  letter-spacing: .01em;
+  background:  #442412 ;
+  /* #442412 là rgb(68,18,18), #7d4d21 là nâu sáng hơn */
+  opacity: 0.95;
+  transition: background 0.15s, color 0.13s, border 0.13s;
+}
+.badge-minimal b { color: #ffffff; font-weight: 700; }
+.badge-buy    { color: #ffe7a8; }
+.badge-star   { color: #ffd600; }
+.badge-status { color: #b8d6ff; }
+.badge-branch { color: #84f9a2; }
+.badge-rating-text { color: #ffe9be; }
+
+.badge-minimal:hover {
+  background: linear-gradient(90deg, #ad7528 70%, #442412 100%);
+  border-color: #ffd600;
+  color: #fffde7;
+  box-shadow: 0 4px 16px #44241229;
+}
+
+.product-badges { gap: 9px; margin-bottom: 12px; }
+/* ===== FILTER OPTIONS BLOCK (SANG CHẢNH, TỐI GIẢN) ===== */
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 11px;
+  margin-bottom: 7px;
+}
+
+/* Nút filter thuộc tính */
+.filter-badge {
+  display: inline-block;
+  padding: 7px 22px;
+  background: rgba(255,255,255,0.05);      /* nền rất nhẹ, gần như trong suốt */
+  color: #3d2721;                          /* màu chữ nâu đỏ tối giản */
+  border-radius: 18px;
+  font-size: 1.07em;
+  font-weight: 500;
+  border: 1.3px solid #dedede;             /* viền xám sáng */
+  cursor: pointer;
+  user-select: none;
+  box-shadow: none;
+  transition:
+    background 0.13s,
+    color 0.14s,
+    border 0.15s,
+    transform 0.12s;
+  margin-bottom: 3px;
+  min-width: 45px;
+  text-align: center;
+  opacity: 0.94;
+}
+
+/* Khi hover/chọn: đổi nền pastel, border nổi bật hơn */
+.filter-badge.selected,
+.filter-badge:hover {
+  background: #fff8eb;
+  color: #b00404;
+  border-color: #ffd600;
+  font-weight: 700;
+  transform: translateY(-1px) scale(1.07);
+}
+
+/* Disable (nếu có) */
+.filter-badge[disabled] {
+  pointer-events: none;
+  opacity: 0.46;
+  background: #f2f2f2;
+  color: #bbb;
+  border-color: #eee;
+}
+
+/* Mobile nhỏ: padding nhỏ lại */
+@media (max-width:600px) {
+  .filter-badge { padding: 6px 13px; font-size: 1em; }
+}
 
 </style>
 
